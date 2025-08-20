@@ -7,7 +7,12 @@ description = "Fabrial plugin for controlling a Quincy 10 GCE lab oven, plus an 
 readme = "README.md"
 # dependencies
 requires-python = ">=3.13"
-dependencies = ["fabrial", "minimalmodbus>=2.1.1"]
+dependencies = [
+    "fabrial",
+    "minimalmodbus>=2.1.1",
+    "pyserial==3.5",
+    "PyQt6>=6.9.1",
+]
 [dependency-groups]
 test = ["pytest"]
 

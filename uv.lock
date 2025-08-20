@@ -42,6 +42,7 @@ source = { editable = "." }
 dependencies = [
     { name = "fabrial" },
     { name = "minimalmodbus" },
+    { name = "pyqt6" },
 ]
 
 [package.dev-dependencies]
@@ -53,6 +54,7 @@ test = [
 requires-dist = [
     { name = "fabrial" },
     { name = "minimalmodbus", specifier = ">=2.1.1" },
+    { name = "pyqt6", specifier = ">=6.9.1" },
 ]
 
 [package.metadata.requires-dev]
