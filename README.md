@@ -6,15 +6,15 @@ Fabrial plugin for controlling a Quince 10 GCE lab oven [Fabrial](https://github
 
 Steps for controlling the oven.
 
-#### `Set Temperature`
+#### `Set Setpoint`
 
 Set the oven's setpoint and wait for the temperature to stabilize at the setpoint.
 
-#### `Set Temperature (No Stabilization)`
+#### `Set Setpoint (No Stabilization)`
 
 Set the oven's setpoint without waiting for the temperature to stabilize.
 
-#### `Increment Temperature`
+#### `Increment Setpoint`
 
 Increment the oven's setpoint and wait the temperature to stabilize at the setpoint.
 
