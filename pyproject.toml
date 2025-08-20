@@ -14,6 +14,9 @@ test = ["pytest"]
 [project.urls]
 Repository = "https://github.com/Maughan-Lab/fabrial-oven-control"
 
+# fabrial entry point
+[project.entry-points."fabrial.plugins"]
+fabrial-oven-control = "fabrial_oven_control"
 
 # hatch config
 [build-system]
