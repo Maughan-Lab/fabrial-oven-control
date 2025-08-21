@@ -18,10 +18,6 @@ Set the oven's setpoint without waiting for the temperature to stabilize.
 
 Increment the oven's setpoint and wait the temperature to stabilize at the setpoint.
 
-#### `Background Temperature Monitoring`
-
-Record the oven's temperature on an interval for the rest of the sequence.
-
 #### `Record Temperature`
 
 Record the oven's current temperature once.

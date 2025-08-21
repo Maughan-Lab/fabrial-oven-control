@@ -1,78 +1,77 @@
-from fabrial.custom_widgets import ComboBox, DoubleSpinBox, SpinBox, Widget
-from PyQt6.QtCore import pyqtSignal
+from fabrial.custom_widgets import DoubleSpinBox, SpinBox, Widget
 from PyQt6.QtGui import QShowEvent
-from PyQt6.QtWidgets import QComboBox, QFormLayout, QWidget
+from PyQt6.QtWidgets import QComboBox, QFormLayout
 
+from .constants import INTERVAL_LABEL, MINIMUM_MEASUREMENTS_LABEL, OVEN_PORT_LABEL, TOLERANCE_LABEL
 from .utility import ports
 
-# class ComboBox(QComboBox):
-#     """`QComboBox` that doesn't show all entries at once."""
 
-#     # signal to detect when the combobox is pressed
-#     pressed = pyqtSignal()
+class PortComboBox(QComboBox):
+    """A `QComboBox` for COM ports."""
 
-#     def __init__(self, items: Iterable[str]):
-#         QComboBox.__init__(self)
-#         self.setStyleSheet("combobox-popup: 0")
-#         self.setMaxVisibleItems(20)
+    def __init__(self, initial_port: str):
+        QComboBox.__init__(self)
+        self.reload_ports()
+        self.setCurrentText(initial_port)
 
-#     def setCurrentIndexSilent(self, index: int):
-#         """Update the current index without emitting signals."""
-#         self.blockSignals(True)
-#         self.setCurrentIndex(index)
-#         self.blockSignals(False)
+    def reload_ports(self):
+        """Refresh the list of ports."""
+        current = self.currentText()
+        self.clear()
+        self.addItems(ports.list_ports())
+        self.setCurrentText(current)  # restore the selection
 
-#     def setCurrentTextSilent(self, text: str | None):
-#         """Update the current text without emitting signals."""
-#         self.blockSignals(True)
-#         self.setCurrentText(text)
-#         self.blockSignals(False)
-
-#     def clearSilent(self):
-#         """Clear the combobox entries without emitting signals."""
-#         self.blockSignals(True)
-#         self.clear()
-#         self.blockSignals(False)
-
-#     def addItemsSilent(self, items: Iterable[str | None]):
-#         """Add items to the combobox without emitting signals."""
-#         self.blockSignals(True)
-#         self.addItems(items)
-#         self.blockSignals(False)
-
-#     # ----------------------------------------------------------------------------------------------
-#     # overridden methods
-#     def showPopup(self):
-#         self.pressed.emit()
-#         QComboBox.showPopup(self)
-
-
-OVEN_PORT_LABEL = "Oven Port"
-INTERVAL_LABEL = "Measurement Interval"
-MINIMUM_MEASUREMENTS_LABEL = "Minimum Measurements for Stability"
-TOLERANCE_LABEL = "Stability Tolerance"
+    def showEvent(self, event: QShowEvent | None):
+        # refresh the list of ports every time this widget is shown
+        self.reload_ports()
+        QComboBox.showEvent(self, event)
 
 
 class OvenStabilizationWidget(Widget):
-    """Contains entries for running a temperature stabilization step."""
+    """
+    Contains entries for running a temperature stabilization step.
+
+    Parameters
+    ----------
+    temperature_label
+        The label to use for the temperature spinbox.
+    minimum_temperature
+        The minimum value for the temperature spinbox.
+    maximum_temperature
+        The maximum value for the temperature spinbox.
+    port
+        The initial port to select.
+    setpoint
+        The initial value of the temperature spinbox.
+    measurement_interval_ms
+        The initial value of the measurement interval spinbox.
+    minimum_measurements
+        The initial value of the minimum measurements spinbox.
+    tolerance
+        The initial value of the tolerance spinbox.
+    """
 
     def __init__(
         self,
         temperature_label: str,
         minimum_temperature: float,
         maximum_temperature: float,
-        decimal_precision: int,
+        port: str,
+        setpoint: float,
+        measurement_interval_ms: int,
+        minimum_measurements: int,
+        tolerance: float,
     ):
         layout = QFormLayout()
         Widget.__init__(self, layout)
 
-        self.port_combo_box = QComboBox()
+        self.port_combo_box = PortComboBox(port)
         self.temperature_spinbox = DoubleSpinBox(
-            decimal_precision, minimum_temperature, maximum_temperature
+            2, minimum_temperature, maximum_temperature, setpoint
         )
-        self.interval_spinbox = SpinBox(10)
-        self.minimum_measurements_spinbox = SpinBox(2)
-        self.tolerance_spinbox = DoubleSpinBox(2)
+        self.interval_spinbox = SpinBox(10, initial_value=measurement_interval_ms)
+        self.minimum_measurements_spinbox = SpinBox(2, initial_value=minimum_measurements)
+        self.tolerance_spinbox = DoubleSpinBox(2, initial_value=tolerance)
 
         for label, widget in (
             (OVEN_PORT_LABEL, self.port_combo_box),
@@ -82,9 +81,3 @@ class OvenStabilizationWidget(Widget):
             (TOLERANCE_LABEL, self.tolerance_spinbox),
         ):
             layout.addRow(label, widget)
-
-    def showEvent(self, event: QShowEvent | None):  # overridden
-        # refresh the list of ports every time this widget is shown
-        self.port_combo_box.clear()
-        self.port_combo_box.addItems(ports.list_ports())
-        Widget.showEvent(self, event)
