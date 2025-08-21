@@ -3,8 +3,8 @@ from typing import Any
 
 from fabrial import SequenceStep, StepRunner
 
-from ... import quince10GCE
 from ...constants import TEMPERATURES_FILENAME
+from ...quince10gce import create_oven
 from ...utility.sequence import StabilizeTask
 from .set_setpoint_widget import BASE_NAME
 
@@ -27,7 +27,7 @@ class SetSetpointStep(SequenceStep):
         self.tolerance = tolerance
 
     async def run(self, runner: StepRunner, data_directory: Path):  # implementation
-        oven = await quince10GCE.create_oven(self.port, self, runner)
+        oven = await create_oven(self.port, self, runner)
         await StabilizeTask(
             oven,
             self.measurement_interval_ms,

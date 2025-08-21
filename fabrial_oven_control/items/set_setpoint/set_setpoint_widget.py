@@ -10,7 +10,7 @@ from ...constants import (
     TEMPERATURES_FILENAME,
     TOLERANCE_LABEL,
 )
-from ...quince10GCE import MAXIMUM_SETPOINT, MINIMUM_SETPOINT
+from ...quince10gce import MAXIMUM_SETPOINT, MINIMUM_SETPOINT
 from ...widgets import OvenStabilizationWidget
 
 BASE_NAME = "Set Setpoint"
