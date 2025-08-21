@@ -7,6 +7,7 @@ from ...constants import (
     INTERVAL_LABEL,
     MINIMUM_MEASUREMENTS_LABEL,
     OVEN_PORT_LABEL,
+    SETPOINT_LABEL,
     TEMPERATURES_FILENAME,
     TOLERANCE_LABEL,
 )
@@ -14,7 +15,6 @@ from ...quince10gce import MAXIMUM_SETPOINT, MINIMUM_SETPOINT
 from ...widgets import OvenStabilizationWidget
 
 BASE_NAME = "Set Setpoint"
-SETPOINT_LABEL = "Setpoint"
 DIRECTORY = Path(__file__).parent
 ICON = QIcon(str(DIRECTORY.joinpath("thermometer--arrow.png")))
 DESCRIPTIONS_DIRECTORY = DIRECTORY.joinpath("descriptions")

@@ -11,7 +11,7 @@ from .increment_setpoint_widget import BASE_NAME
 
 
 class IncrementSetpointStep(SequenceStep):
-    """Set the oven's setpoint and stabilize; step."""
+    """Increment the oven's setpoint and stabilize; step."""
 
     def __init__(
         self,

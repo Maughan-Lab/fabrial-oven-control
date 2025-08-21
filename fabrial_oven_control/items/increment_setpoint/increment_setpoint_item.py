@@ -11,7 +11,7 @@ from .increment_setpoint_widget import IncrementSetpointWidget
 
 
 class IncrementSetpointItem(WidgetDataItem):
-    """Set the oven's setpoint and stabilize; item."""
+    """Increment the oven's setpoint and stabilize; item."""
 
     def __init__(
         self,

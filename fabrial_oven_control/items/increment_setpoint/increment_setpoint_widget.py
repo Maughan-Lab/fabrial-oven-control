@@ -4,6 +4,7 @@ from fabrial import FilesDescription, ItemWidget, Substitutions
 from PyQt6.QtGui import QIcon
 
 from ...constants import (
+    INCREMENT_LABEL,
     INTERVAL_LABEL,
     MINIMUM_MEASUREMENTS_LABEL,
     OVEN_PORT_LABEL,
@@ -14,14 +15,13 @@ from ...quince10gce import MAXIMUM_SETPOINT
 from ...widgets import OvenStabilizationWidget
 
 BASE_NAME = "Increment Setpoint"
-INCREMENT_LABEL = "Increment"
 DIRECTORY = Path(__file__).parent
 ICON = QIcon(str(DIRECTORY.joinpath("thermometer--plus.png")))
 DESCRIPTIONS_DIRECTORY = DIRECTORY.joinpath("descriptions")
 
 
 class IncrementSetpointWidget(ItemWidget):
-    """Set the oven's setpoint and stabilize; widget."""
+    """Increment the oven's setpoint and stabilize; widget."""
 
     def __init__(
         self,

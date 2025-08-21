@@ -9,7 +9,7 @@ from .utility import ports
 class PortComboBox(QComboBox):
     """A `QComboBox` for COM ports."""
 
-    def __init__(self, initial_port: str):
+    def __init__(self, initial_port: str | None = None):
         QComboBox.__init__(self)
         self.reload_ports()
         self.setCurrentText(initial_port)
