@@ -1,6 +1,7 @@
 # serialization keys
 PORT = "port"
 SETPOINT = "setpoint"
+INCREMENT = "increment"
 MEASUREMENT_INTERVAL = "measurement_interval"
 MINIMUM_MEASUREMENTS = "minimum_measurements"
 TOLERANCE = "tolerance"

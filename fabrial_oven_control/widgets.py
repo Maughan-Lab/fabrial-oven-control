@@ -41,7 +41,7 @@ class OvenStabilizationWidget(Widget):
         The maximum value for the temperature spinbox.
     port
         The initial port to select.
-    setpoint
+    temperature
         The initial value of the temperature spinbox.
     measurement_interval_ms
         The initial value of the measurement interval spinbox.
@@ -57,7 +57,7 @@ class OvenStabilizationWidget(Widget):
         minimum_temperature: float,
         maximum_temperature: float,
         port: str,
-        setpoint: float,
+        temperature: float,
         measurement_interval_ms: int,
         minimum_measurements: int,
         tolerance: float,
@@ -67,7 +67,7 @@ class OvenStabilizationWidget(Widget):
 
         self.port_combo_box = PortComboBox(port)
         self.temperature_spinbox = DoubleSpinBox(
-            2, minimum_temperature, maximum_temperature, setpoint
+            2, minimum_temperature, maximum_temperature, temperature
         )
         self.interval_spinbox = SpinBox(10, initial_value=measurement_interval_ms)
         self.minimum_measurements_spinbox = SpinBox(2, initial_value=minimum_measurements)

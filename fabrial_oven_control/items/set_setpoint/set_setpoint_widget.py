@@ -32,7 +32,7 @@ class SetSetpointWidget(ItemWidget):
         tolerance: float,
     ):
         self.data_widget = OvenStabilizationWidget(
-            "Setpoint",
+            SETPOINT_LABEL,
             MINIMUM_SETPOINT,
             MAXIMUM_SETPOINT,
             port,
