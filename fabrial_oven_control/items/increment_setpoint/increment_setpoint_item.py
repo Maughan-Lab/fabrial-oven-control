@@ -3,7 +3,7 @@ from typing import Mapping, Self
 
 from fabrial import Json, SequenceStep, WidgetDataItem
 
-from ...constants import INCREMENT, MEASUREMENT_INTERVAL, MINIMUM_MEASUREMENTS, PORT, TOLERANCE
+from ...constants import INCREMENT, MEASUREMENT_INTERVAL, MINIMUM_MEASUREMENTS, OVEN_PORT, TOLERANCE
 
 # from .set_setpoint_step import SetSetpointStep
 from .increment_setpoint_step import IncrementSetpointStep
@@ -15,7 +15,7 @@ class IncrementSetpointItem(WidgetDataItem):
 
     def __init__(
         self,
-        port: str,
+        port: str | None,
         increment: float,
         measurement_interval_ms: int,
         minimum_measurements: int,
@@ -28,19 +28,19 @@ class IncrementSetpointItem(WidgetDataItem):
     @classmethod
     def deserialize(cls, serialized_obj: Mapping[str, Json]) -> Self:  # implementation
         item = cls(
-            typing.cast(str, serialized_obj[PORT]),
+            typing.cast(str, serialized_obj[OVEN_PORT]),
             typing.cast(float, serialized_obj[INCREMENT]),
             typing.cast(int, serialized_obj[MEASUREMENT_INTERVAL]),
             typing.cast(int, serialized_obj[MINIMUM_MEASUREMENTS]),
             typing.cast(float, serialized_obj[TOLERANCE]),
         )
-        item.data_widget.handle_setpoint_change()
+        item.data_widget.handle_increment_change()
         return item
 
     def serialize(self) -> dict[str, Json]:  # implementation
         widget = self.data_widget.data_widget
         return {
-            PORT: widget.port_combo_box.currentText(),
+            OVEN_PORT: widget.port_combo_box.currentText(),
             INCREMENT: widget.temperature_spinbox.value(),
             MEASUREMENT_INTERVAL: widget.interval_spinbox.value(),
             MINIMUM_MEASUREMENTS: widget.minimum_measurements_spinbox.value(),

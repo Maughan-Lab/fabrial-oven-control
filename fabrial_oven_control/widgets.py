@@ -56,7 +56,7 @@ class OvenStabilizationWidget(Widget):
         temperature_label: str,
         minimum_temperature: float,
         maximum_temperature: float,
-        port: str,
+        port: str | None,
         temperature: float,
         measurement_interval_ms: int,
         minimum_measurements: int,

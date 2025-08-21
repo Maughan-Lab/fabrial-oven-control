@@ -14,6 +14,7 @@ from ..oven import Oven
 MAXIMUM_ALLOWED_DISCONNECTS = 5
 
 
+# public
 class StabilizeTask:
     """
     Utility class that sets an oven's setpoint and waits for the temperature to stabilize.
@@ -164,6 +165,11 @@ async def set_setpoint_check(setpoint: float, oven: Oven, step: SequenceStep, ru
     ------
     StepCancellation
         The user asked to cancel the step.
+
+    Notes
+    -----
+    This function *does not* clamp the setpoint to the oven's allowed range. You are responsible
+    for ensuring the setpoint is valid.
     """
     while True:
         # try to set the setpoint
@@ -185,62 +191,6 @@ async def set_setpoint_check(setpoint: float, oven: Oven, step: SequenceStep, ru
             continue
 
         return  # if we get here we successfully set the setpoint
-
-
-# public
-async def clamp_setpoint(
-    setpoint: float, oven: Oven, step: SequenceStep, runner: StepRunner
-) -> float:
-    """
-    Check that the **setpoint** is within the **oven**'s allowed range. If not, prompt the user on
-    whether the clamp the setpoint or cancel the step.
-
-    Returns
-    -------
-    A valid setpoint (possibly the original).
-
-    Raises
-    ------
-    StepCancellation
-        The user asked to cancel the step.
-    """
-    if setpoint < (minimum := oven.minimum_setpoint()):
-        await prompt_for_clamp(
-            "The selected setpoint is below the oven's minimum."
-            "\n\nClamp to the minimum or cancel this step?",
-            step,
-            runner,
-        )
-        return minimum
-    elif setpoint > (maximum := oven.maximum_setpoint()):
-        await prompt_for_clamp(
-            "The selected setpoint is above the oven's maximum."
-            "\n\nClamp to the maximum or cancel this step?",
-            step,
-            runner,
-        )
-        return maximum
-
-    return setpoint  # if it's within range just return the original
-
-
-# private
-async def prompt_for_clamp(message: str, step: SequenceStep, runner: StepRunner):
-    """
-    Prompt the user whether to clamp the setpoint or cancel the step.
-
-    Raises
-    ------
-    StepCancellation
-        The user asked to cancel the step.
-    """
-    match (response := await runner.prompt_user(step, message, {0: "Clamp", 1: "Cancel Step"})):
-        case 0:  # clamp
-            return
-        case 1:  # cancel the step
-            raise StepCancellation
-        case _:  # this should never run
-            raise ValueError(f"Got {response} but expected 0 or 1")
 
 
 # public
@@ -303,3 +253,59 @@ async def read_setpoint_check(oven: Oven, step: SequenceStep, runner: StepRunner
         disconnect_count = 0
 
     return setpoint
+
+
+# public
+async def clamp_setpoint(
+    setpoint: float, oven: Oven, step: SequenceStep, runner: StepRunner
+) -> float:
+    """
+    Check that the **setpoint** is within the **oven**'s allowed range. If not, prompt the user on
+    whether the clamp the setpoint or cancel the step.
+
+    Returns
+    -------
+    A valid setpoint (possibly the original).
+
+    Raises
+    ------
+    StepCancellation
+        The user asked to cancel the step.
+    """
+    if setpoint < (minimum := oven.minimum_setpoint()):
+        await prompt_for_clamp(
+            "The selected setpoint is below the oven's minimum."
+            "\n\nClamp to the minimum or cancel this step?",
+            step,
+            runner,
+        )
+        return minimum
+    elif setpoint > (maximum := oven.maximum_setpoint()):
+        await prompt_for_clamp(
+            "The selected setpoint is above the oven's maximum."
+            "\n\nClamp to the maximum or cancel this step?",
+            step,
+            runner,
+        )
+        return maximum
+
+    return setpoint  # if it's within range just return the original
+
+
+# private
+async def prompt_for_clamp(message: str, step: SequenceStep, runner: StepRunner):
+    """
+    Prompt the user whether to clamp the setpoint or cancel the step.
+
+    Raises
+    ------
+    StepCancellation
+        The user asked to cancel the step.
+    """
+    match (response := await runner.prompt_user(step, message, {0: "Clamp", 1: "Cancel Step"})):
+        case 0:  # clamp
+            return
+        case 1:  # cancel the step
+            raise StepCancellation
+        case _:  # this should never run
+            raise ValueError(f"Got {response} but expected 0 or 1")

@@ -3,7 +3,7 @@ from typing import Mapping, Self
 
 from fabrial import Json, SequenceStep, WidgetDataItem
 
-from ...constants import MEASUREMENT_INTERVAL, MINIMUM_MEASUREMENTS, PORT, SETPOINT, TOLERANCE
+from ...constants import MEASUREMENT_INTERVAL, MINIMUM_MEASUREMENTS, OVEN_PORT, SETPOINT, TOLERANCE
 from .set_setpoint_step import SetSetpointStep
 from .set_setpoint_widget import SetSetpointWidget
 
@@ -13,7 +13,7 @@ class SetSetpointItem(WidgetDataItem):
 
     def __init__(
         self,
-        port: str,
+        port: str | None,
         setpoint: float,
         measurement_interval_ms: int,
         minimum_measurements: int,
@@ -26,7 +26,7 @@ class SetSetpointItem(WidgetDataItem):
     @classmethod
     def deserialize(cls, serialized_obj: Mapping[str, Json]) -> Self:  # implementation
         item = cls(
-            typing.cast(str, serialized_obj[PORT]),
+            typing.cast(str, serialized_obj[OVEN_PORT]),
             typing.cast(float, serialized_obj[SETPOINT]),
             typing.cast(int, serialized_obj[MEASUREMENT_INTERVAL]),
             typing.cast(int, serialized_obj[MINIMUM_MEASUREMENTS]),
@@ -38,7 +38,7 @@ class SetSetpointItem(WidgetDataItem):
     def serialize(self) -> dict[str, Json]:  # implementation
         widget = self.data_widget.data_widget
         return {
-            PORT: widget.port_combo_box.currentText(),
+            OVEN_PORT: widget.port_combo_box.currentText(),
             SETPOINT: widget.temperature_spinbox.value(),
             MEASUREMENT_INTERVAL: widget.interval_spinbox.value(),
             MINIMUM_MEASUREMENTS: widget.minimum_measurements_spinbox.value(),

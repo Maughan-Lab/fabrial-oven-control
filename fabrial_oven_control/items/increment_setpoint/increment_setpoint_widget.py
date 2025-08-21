@@ -11,7 +11,7 @@ from ...constants import (
     TEMPERATURES_FILENAME,
     TOLERANCE_LABEL,
 )
-from ...quince10gce import MAXIMUM_SETPOINT
+from ...quince10GCE import MAXIMUM_SETPOINT
 from ...widgets import OvenStabilizationWidget
 
 BASE_NAME = "Increment Setpoint"
@@ -25,7 +25,7 @@ class IncrementSetpointWidget(ItemWidget):
 
     def __init__(
         self,
-        port: str,
+        port: str | None,
         increment: float,
         measurement_interval_ms: int,
         minimum_measurements: int,
@@ -63,8 +63,8 @@ class IncrementSetpointWidget(ItemWidget):
             ),
         )
 
-        self.data_widget.temperature_spinbox.editingFinished.connect(self.handle_setpoint_change)
+        self.data_widget.temperature_spinbox.editingFinished.connect(self.handle_increment_change)
 
-    def handle_setpoint_change(self):
+    def handle_increment_change(self):
         """Handle the value of the increment spinbox changing."""
         self.setWindowTitle(f"{BASE_NAME} ({self.data_widget.temperature_spinbox.value()} degrees)")

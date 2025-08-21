@@ -1,5 +1,5 @@
 # serialization keys
-PORT = "port"
+OVEN_PORT = "oven_port"
 SETPOINT = "setpoint"
 INCREMENT = "increment"
 MEASUREMENT_INTERVAL = "measurement_interval"

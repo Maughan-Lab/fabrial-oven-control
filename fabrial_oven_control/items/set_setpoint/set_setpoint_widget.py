@@ -11,7 +11,7 @@ from ...constants import (
     TEMPERATURES_FILENAME,
     TOLERANCE_LABEL,
 )
-from ...quince10gce import MAXIMUM_SETPOINT, MINIMUM_SETPOINT
+from ...quince10GCE import MAXIMUM_SETPOINT, MINIMUM_SETPOINT
 from ...widgets import OvenStabilizationWidget
 
 BASE_NAME = "Set Setpoint"
@@ -25,7 +25,7 @@ class SetSetpointWidget(ItemWidget):
 
     def __init__(
         self,
-        port: str,
+        port: str | None,
         setpoint: float,
         measurement_interval_ms: int,
         minimum_measurements: int,
