@@ -43,6 +43,7 @@ dependencies = [
     { name = "fabrial" },
     { name = "minimalmodbus" },
     { name = "pyqt6" },
+    { name = "pyserial" },
 ]
 
 [package.dev-dependencies]
@@ -55,6 +56,7 @@ requires-dist = [
     { name = "fabrial" },
     { name = "minimalmodbus", specifier = ">=2.1.1" },
     { name = "pyqt6", specifier = ">=6.9.1" },
+    { name = "pyserial", specifier = "==3.5" },
 ]
 
 [package.metadata.requires-dev]

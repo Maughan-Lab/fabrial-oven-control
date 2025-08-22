@@ -1,4 +1,4 @@
-Fabrial plugin for controlling a Quince 10 GCE lab oven [Fabrial](https://github.com/Maughan-Lab/fabrial.git).
+[Fabrial](https://pypi.org/project/fabrial/) plugin for controlling a Quince 10 GCE lab oven.
 
 ## Categories
 
