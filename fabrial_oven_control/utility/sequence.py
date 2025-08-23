@@ -59,7 +59,7 @@ class StabilizeTask:
         temperature_filename: str,
     ):
         self.oven = oven
-        self.measurement_interval_ms = measurement_interval_ms
+        self.measurement_interval = measurement_interval_ms / 1000  # convert from ms to seconds
         self.minimum_measurements = minimum_measurements
         self.tolerance = tolerance
         self.step = step
@@ -98,6 +98,9 @@ class StabilizeTask:
             start_time = time.time()
 
             while stable_measurement_count < self.minimum_measurements:
+                # we use this to account for the time it takes to measure
+                current_time = time.time()
+
                 # read the temperature
                 temperature, failure_count = await read_temperature_check(
                     self.oven, self.step, self.runner
@@ -111,6 +114,9 @@ class StabilizeTask:
                     stable_measurement_count += 1
                 else:  # otherwise we are unstable; reset
                     stable_measurement_count = 0
+
+                # wait for the next time so we measure on an interval
+                await self.step.sleep_until(current_time + self.measurement_interval)
 
     async def record_measurement(
         self, file: TextIO, start_time: float, temperature: float, line_handle: LineHandle
@@ -142,7 +148,8 @@ class StabilizeTask:
         while True:
             try:
                 file = exit_stack.enter_context(
-                    open(self.data_directory.joinpath(self.temperature_filename), "w")
+                    # line buffered
+                    open(self.data_directory.joinpath(self.temperature_filename), "w", 1)
                 )
                 # write the header
                 csv.writer(file, lineterminator="\n").writerow(
@@ -153,6 +160,7 @@ class StabilizeTask:
                 await self.runner.prompt_retry_cancel(
                     self.step, "Failed to create temperatures file."
                 )
+            await self.step.sleep(0)
 
 
 # public
@@ -242,7 +250,7 @@ async def read_setpoint_check(oven: Oven, step: SequenceStep, runner: StepRunner
         The user asked to cancel the step.
     """
     disconnect_count = 0
-    while (setpoint := oven.read_temperature()) is None:
+    while (setpoint := oven.read_setpoint()) is None:
         disconnect_count += 1
         if disconnect_count < MAXIMUM_ALLOWED_DISCONNECTS:
             await step.sleep(1)  # arbitrary delay

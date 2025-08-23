@@ -46,10 +46,10 @@ class Oven(Protocol):
 
     @abstractmethod
     def minimum_setpoint(self) -> float:
-        """Get the minimum setpoint."""
+        """Get the minimum setpoint. This is expected to be a constant."""
         ...
 
     @abstractmethod
     def maximum_setpoint(self) -> float:
-        """Get the maximum setpoint."""
+        """Get the maximum setpoint. This is expected to be a constant."""
         ...

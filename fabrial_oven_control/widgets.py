@@ -1,30 +1,7 @@
-from fabrial.custom_widgets import DoubleSpinBox, SpinBox, Widget
-from PyQt6.QtGui import QShowEvent
-from PyQt6.QtWidgets import QComboBox, QFormLayout
+from fabrial.custom_widgets import DoubleSpinBox, PortComboBox, SpinBox, Widget
+from PyQt6.QtWidgets import QFormLayout
 
 from .constants import INTERVAL_LABEL, MINIMUM_MEASUREMENTS_LABEL, OVEN_PORT_LABEL, TOLERANCE_LABEL
-from .utility import ports
-
-
-class PortComboBox(QComboBox):
-    """A `QComboBox` for COM ports."""
-
-    def __init__(self, initial_port: str | None = None):
-        QComboBox.__init__(self)
-        self.reload_ports()
-        self.setCurrentText(initial_port)
-
-    def reload_ports(self):
-        """Refresh the list of ports."""
-        current = self.currentText()
-        self.clear()
-        self.addItems(ports.list_ports())
-        self.setCurrentText(current)  # restore the selection
-
-    def showEvent(self, event: QShowEvent | None):
-        # refresh the list of ports every time this widget is shown
-        self.reload_ports()
-        QComboBox.showEvent(self, event)
 
 
 class OvenStabilizationWidget(Widget):
