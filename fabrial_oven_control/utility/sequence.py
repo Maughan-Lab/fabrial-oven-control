@@ -90,7 +90,7 @@ class StabilizeTask:
                     PlotSettings("Oven Temperature", "Time (s)", "Temperature (°C)"),
                 )
             )
-            line_handle = await plot_handle.add_line(None, None, SymbolParams("o", "orange", 2))
+            line_handle = await plot_handle.add_line(None, None, SymbolParams("o", "orange", 8))
 
             # how many "stable" measurements we've taken
             stable_measurement_count = 0
